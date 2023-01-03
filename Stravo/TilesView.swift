@@ -6,14 +6,18 @@
 //
 
 import SwiftUI
+import MapKit
 import CoreLocation
 
 struct TilesView: View {
-    @StateObject var manager = LocationManager()
-   
+    @StateObject var vm = ViewModel()
+
     var body: some View {
         NavigationView {
-            Text("Map")
+            ZStack {
+                MapView(vm: vm)
+                Text(vm.region.debugDescription)
+            }
         }
         .ignoresSafeArea()
     }
@@ -25,7 +29,11 @@ struct TilesView_Previews: PreviewProvider {
     }
 }
 
-class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
+class ViewModel: NSObject, CLLocationManagerDelegate, ObservableObject {
+    @Published var region: MKCoordinateRegion?
+    @Published var center: CLLocationCoordinate2D?
+    var shouldUpdateView: Bool = true
+
     private let manager = CLLocationManager()
     
     override init() {
@@ -38,7 +46,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate, ObservableObject {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         locations.last.map {
-            print($0)
+            center = $0.coordinate
         }
+        manager.stopUpdatingLocation()
     }
 }
