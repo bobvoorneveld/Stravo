@@ -13,48 +13,86 @@ struct LoginView: View {
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
-        VStack (spacing: 20) {
-            Text("Login to Stravo")
-                .font(.title)
-                .padding(.bottom, 20)
-            
-            TextField("username", text: $vm.username)
-                .textContentType(.emailAddress)
-                .textCase(.lowercase)
-                .textInputAutocapitalization(.never)
-                .font(.system(size: 18))
-                .foregroundColor(colorScheme == .light ? .indigo : .white)
-                .padding()
-                .background(.indigo.opacity(0.2))
-                .cornerRadius(8)
-            
-            SecureField("password", text: $vm.password)
-                .font(.system(size: 18))
-                .foregroundColor(colorScheme == .light ? .indigo : .white)
-                .padding()
-                .background(.indigo.opacity(0.2))
-                .cornerRadius(8)
-
-            Button {
-                Task {
-                    await vm.login()
+        ZStack {
+            if vm.loading {
+                ZStack {
+                    Color.indigo
+                        .opacity(0.2)
+                    
+                    ProgressView("Login...")
+                        .progressViewStyle(.circular)
                 }
-            } label: {
-                Text("Login")
-                    .font(.system(size: 18))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .opacity(vm.loginEnabled ? 1.0: 0.5)
             }
-            .disabled(!vm.loginEnabled)
-            .background(.indigo.opacity(vm.loginEnabled ? 1.0: 0.5))
-            .foregroundColor(.white)
-            .cornerRadius(12)
-
-            Spacer()
+            
+            if let error = vm.error {
+                
+                ZStack {
+                    Color.indigo
+                    
+                    VStack {
+                        Text(error)
+                            .foregroundColor(.white)
+                        
+                        Button {
+                            vm.error = nil
+                        } label: {
+                            Text("Ok")
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(.white)
+                        }
+                        .foregroundColor(.indigo)
+                        .cornerRadius(12)
+                        .padding()
+                    }
+                }
+            } else {
+                
+                VStack (spacing: 20) {
+                    Text("Login to Stravo")
+                        .font(.title)
+                        .padding(.bottom, 20)
+                    
+                    TextField("username", text: $vm.username)
+                        .textContentType(.emailAddress)
+                        .textCase(.lowercase)
+                        .textInputAutocapitalization(.never)
+                        .font(.system(size: 18))
+                        .foregroundColor(colorScheme == .light ? .indigo : .white)
+                        .padding()
+                        .background(.indigo.opacity(0.2))
+                        .cornerRadius(8)
+                    
+                    SecureField("password", text: $vm.password)
+                        .font(.system(size: 18))
+                        .foregroundColor(colorScheme == .light ? .indigo : .white)
+                        .padding()
+                        .background(.indigo.opacity(0.2))
+                        .cornerRadius(8)
+                    
+                    Button {
+                        Task {
+                            await vm.login()
+                        }
+                    } label: {
+                        Text("Login")
+                            .font(.system(size: 18))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+                            .opacity(vm.loginEnabled ? 1.0: 0.5)
+                    }
+                    .disabled(!vm.loginEnabled || vm.loading)
+                    .background(.indigo.opacity(vm.loginEnabled ? 1.0: 0.5))
+                    .foregroundColor(.white)
+                    .cornerRadius(12)
+                    
+                    Spacer()
+                }
+                .padding()
+                .padding(.top, 50)
+            }
         }
-        .padding()
-        .padding(.top, 50)
+        .ignoresSafeArea()
     }
 }
 
@@ -62,24 +100,49 @@ private class ViewModel: ObservableObject {
     @Published var username = ""
     @Published var password = ""
     
+    @Published var loading = false
+    
+    @Published var error: String?
+
     var loginEnabled: Bool {
         !(username.isEmpty || password.isEmpty)
     }
     
     @MainActor
     func login() async {
-        
+        loading = true
         var request = URLRequest(url: URL(string: "http://localhost:8080/users/token/login")!)
         request.httpMethod = "POST"
         let token = "\(username):\(password)".data(using: .utf8)!.base64EncodedString()
         request.setValue("Basic \(token)", forHTTPHeaderField: "Authorization")
         do {
-            let (data, _) = try await URLSession.shared.data(for: request)
+            let (data, response) = try await URLSession.shared.data(for: request)
+            
+            if let urlResponse = response as? HTTPURLResponse, urlResponse.statusCode != 200 {
+                print(urlResponse.statusCode)
+                throw LoginError.loginFailed
+            }
             let token = try JSONDecoder().decode(LoginResponse.self, from: data)
-            print(token.token)
+            await MainActor.run {
+                loading = false
+            }
         } catch {
-            print(error)
+            await MainActor.run {
+                withAnimation {
+                    self.loading = false
+                    self.error = error.localizedDescription
+                    self.password = ""
+                }
+            }
         }
+    }
+}
+
+enum LoginError: Error, LocalizedError {
+    case loginFailed
+    
+    var errorDescription: String? {
+        "Login failed, please try again"
     }
 }
 
