@@ -14,6 +14,7 @@
 		C4358B2929642FD1004A39E7 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4358B2829642FD1004A39E7 /* LoginView.swift */; };
 		C4478B9A29647BE7004622D8 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = C4478B9929647BE7004622D8 /* KeychainAccess */; };
 		C4478B9C29647C98004622D8 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4478B9B29647C98004622D8 /* MainView.swift */; };
+		C4478B9E2964825E004622D8 /* TilesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4478B9D2964825E004622D8 /* TilesView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,8 @@
 		C4358B2129642F9D004A39E7 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C4358B2829642FD1004A39E7 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		C4478B9B29647C98004622D8 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		C4478B9D2964825E004622D8 /* TilesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TilesView.swift; sourceTree = "<group>"; };
+		C4478B9F29648688004622D8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,12 +60,14 @@
 		C4358B1929642F9C004A39E7 /* Stravo */ = {
 			isa = PBXGroup;
 			children = (
+				C4478B9F29648688004622D8 /* Info.plist */,
 				C4358B1A29642F9C004A39E7 /* StravoApp.swift */,
 				C4358B1C29642F9C004A39E7 /* ContentView.swift */,
 				C4358B2829642FD1004A39E7 /* LoginView.swift */,
+				C4478B9B29647C98004622D8 /* MainView.swift */,
+				C4478B9D2964825E004622D8 /* TilesView.swift */,
 				C4358B1E29642F9D004A39E7 /* Assets.xcassets */,
 				C4358B2029642F9D004A39E7 /* Preview Content */,
-				C4478B9B29647C98004622D8 /* MainView.swift */,
 			);
 			path = Stravo;
 			sourceTree = "<group>";
@@ -151,6 +156,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4478B9E2964825E004622D8 /* TilesView.swift in Sources */,
 				C4358B2929642FD1004A39E7 /* LoginView.swift in Sources */,
 				C4478B9C29647C98004622D8 /* MainView.swift in Sources */,
 				C4358B1D29642F9C004A39E7 /* ContentView.swift in Sources */,
@@ -286,7 +292,10 @@
 				DEVELOPMENT_TEAM = VD43MWKKT2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Stravo/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Stravo;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need your location to know where you are on the map.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to know where you are on the map.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -317,7 +326,10 @@
 				DEVELOPMENT_TEAM = VD43MWKKT2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Stravo/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Stravo;
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need your location to know where you are on the map.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to know where you are on the map.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

@@ -16,7 +16,7 @@ struct ContentView: View {
         if userStore.token != nil {
             MainView()
         } else {
-            LoginView(vm: LoginView.ViewModel(userStore: userStore))
+            LoginView(vm: .init(userStore: userStore))
         }
     }
 }
