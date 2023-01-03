@@ -12,6 +12,8 @@
 		C4358B1F29642F9D004A39E7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4358B1E29642F9D004A39E7 /* Assets.xcassets */; };
 		C4358B2229642F9D004A39E7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4358B2129642F9D004A39E7 /* Preview Assets.xcassets */; };
 		C4358B2929642FD1004A39E7 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4358B2829642FD1004A39E7 /* LoginView.swift */; };
+		C4478B9A29647BE7004622D8 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = C4478B9929647BE7004622D8 /* KeychainAccess */; };
+		C4478B9C29647C98004622D8 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4478B9B29647C98004622D8 /* MainView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +23,7 @@
 		C4358B1E29642F9D004A39E7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C4358B2129642F9D004A39E7 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C4358B2829642FD1004A39E7 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		C4478B9B29647C98004622D8 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -28,6 +31,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4478B9A29647BE7004622D8 /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,6 +62,7 @@
 				C4358B2829642FD1004A39E7 /* LoginView.swift */,
 				C4358B1E29642F9D004A39E7 /* Assets.xcassets */,
 				C4358B2029642F9D004A39E7 /* Preview Content */,
+				C4478B9B29647C98004622D8 /* MainView.swift */,
 			);
 			path = Stravo;
 			sourceTree = "<group>";
@@ -86,6 +91,9 @@
 			dependencies = (
 			);
 			name = Stravo;
+			packageProductDependencies = (
+				C4478B9929647BE7004622D8 /* KeychainAccess */,
+			);
 			productName = Stravo;
 			productReference = C4358B1729642F9C004A39E7 /* Stravo.app */;
 			productType = "com.apple.product-type.application";
@@ -114,6 +122,9 @@
 				Base,
 			);
 			mainGroup = C4358B0E29642F9C004A39E7;
+			packageReferences = (
+				C4478B9829647BE7004622D8 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+			);
 			productRefGroup = C4358B1829642F9C004A39E7 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -141,6 +152,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C4358B2929642FD1004A39E7 /* LoginView.swift in Sources */,
+				C4478B9C29647C98004622D8 /* MainView.swift in Sources */,
 				C4358B1D29642F9C004A39E7 /* ContentView.swift in Sources */,
 				C4358B1B29642F9C004A39E7 /* StravoApp.swift in Sources */,
 			);
@@ -347,6 +359,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C4478B9829647BE7004622D8 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C4478B9929647BE7004622D8 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4478B9829647BE7004622D8 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C4358B0F29642F9C004A39E7 /* Project object */;
 }

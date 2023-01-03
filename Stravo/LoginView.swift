@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LoginView: View {
-    @StateObject private var vm = ViewModel()
+    @StateObject var vm: ViewModel
 
     @Environment(\.colorScheme) var colorScheme
     
@@ -96,42 +96,51 @@ struct LoginView: View {
     }
 }
 
-private class ViewModel: ObservableObject {
-    @Published var username = ""
-    @Published var password = ""
-    
-    @Published var loading = false
-    
-    @Published var error: String?
-
-    var loginEnabled: Bool {
-        !(username.isEmpty || password.isEmpty)
-    }
-    
-    @MainActor
-    func login() async {
-        loading = true
-        var request = URLRequest(url: URL(string: "http://localhost:8080/users/token/login")!)
-        request.httpMethod = "POST"
-        let token = "\(username):\(password)".data(using: .utf8)!.base64EncodedString()
-        request.setValue("Basic \(token)", forHTTPHeaderField: "Authorization")
-        do {
-            let (data, response) = try await URLSession.shared.data(for: request)
-            
-            if let urlResponse = response as? HTTPURLResponse, urlResponse.statusCode != 200 {
-                print(urlResponse.statusCode)
-                throw LoginError.loginFailed
-            }
-            let token = try JSONDecoder().decode(LoginResponse.self, from: data)
-            await MainActor.run {
-                loading = false
-            }
-        } catch {
-            await MainActor.run {
-                withAnimation {
-                    self.loading = false
-                    self.error = error.localizedDescription
-                    self.password = ""
+extension LoginView {
+    class ViewModel: ObservableObject {
+        @Published var username = ""
+        @Published var password = ""
+        
+        @Published var loading = false
+        
+        @Published var error: String?
+        
+        var loginEnabled: Bool {
+            !(username.isEmpty || password.isEmpty)
+        }
+        
+        private var userStore: UserStore
+        
+        init(userStore: UserStore) {
+            self.userStore = userStore
+        }
+        
+        @MainActor
+        func login() async {
+            loading = true
+            var request = URLRequest(url: URL(string: "http://localhost:8080/users/token/login")!)
+            request.httpMethod = "POST"
+            let token = "\(username):\(password)".data(using: .utf8)!.base64EncodedString()
+            request.setValue("Basic \(token)", forHTTPHeaderField: "Authorization")
+            do {
+                let (data, response) = try await URLSession.shared.data(for: request)
+                
+                if let urlResponse = response as? HTTPURLResponse, urlResponse.statusCode != 200 {
+                    print(urlResponse.statusCode)
+                    throw LoginError.loginFailed
+                }
+                let credentials = try JSONDecoder().decode(Credentials.self, from: data)
+                await MainActor.run {
+                    loading = false
+                    userStore.store(credentials: credentials)
+                }
+            } catch {
+                await MainActor.run {
+                    withAnimation {
+                        self.loading = false
+                        self.error = error.localizedDescription
+                        self.password = ""
+                    }
                 }
             }
         }
@@ -144,10 +153,6 @@ enum LoginError: Error, LocalizedError {
     var errorDescription: String? {
         "Login failed, please try again"
     }
-}
-
-struct LoginResponse: Decodable {
-    let token: String
 }
 
 struct LoginView_Previews: PreviewProvider {
