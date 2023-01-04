@@ -8,18 +8,28 @@
 import SwiftUI
 
 struct MainView: View {
+    @StateObject var vm: ViewModel
+
     var body: some View {
         TabView {
-            TilesView()
+            TilesView(vm: .init(userStore: vm.userStore))
                 .tabItem {
                     Label("Tiles", systemImage: "checkerboard.rectangle")
                 }
+        }
+    }
+    
+    class ViewModel: ObservableObject {
+        var userStore: UserStore
+        
+        init(userStore: UserStore) {
+            self.userStore = userStore
         }
     }
 }
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView()
+        ContentView()
     }
 }

@@ -132,6 +132,7 @@
 			mainGroup = C4358B0E29642F9C004A39E7;
 			packageReferences = (
 				C4478B9829647BE7004622D8 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
+				C4478BA52964E0CC004622D8 /* XCRemoteSwiftPackageReference "fluent-postgis" */,
 			);
 			productRefGroup = C4358B1829642F9C004A39E7 /* Products */;
 			projectDirPath = "";
@@ -383,6 +384,14 @@
 			requirement = {
 				branch = master;
 				kind = branch;
+			};
+		};
+		C4478BA52964E0CC004622D8 /* XCRemoteSwiftPackageReference "fluent-postgis" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/brokenhandsio/fluent-postgis.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

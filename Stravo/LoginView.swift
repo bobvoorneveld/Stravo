@@ -127,7 +127,7 @@ extension LoginView {
                 
                 if let urlResponse = response as? HTTPURLResponse, urlResponse.statusCode != 200 {
                     print(urlResponse.statusCode)
-                    throw LoginError.loginFailed
+                    throw StravoCloudError.loginFailed
                 }
                 let credentials = try JSONDecoder().decode(Credentials.self, from: data)
                 await MainActor.run {
@@ -147,11 +147,15 @@ extension LoginView {
     }
 }
 
-enum LoginError: Error, LocalizedError {
+enum StravoCloudError: Error, LocalizedError {
     case loginFailed
+    case invalidResponse
     
     var errorDescription: String? {
-        "Login failed, please try again"
+        switch self {
+        case .loginFailed: return "Login failed, please try again"
+        case .invalidResponse: return "Invalid response"
+        }
     }
 }
 

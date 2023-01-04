@@ -14,7 +14,7 @@ struct ContentView: View {
 
     var body: some View {
         if userStore.token != nil {
-            MainView()
+            MainView(vm: .init(userStore: userStore))
         } else {
             LoginView(vm: .init(userStore: userStore))
         }
