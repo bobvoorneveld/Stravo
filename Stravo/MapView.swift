@@ -25,7 +25,10 @@ struct MapView: UIViewRepresentable {
             return
         }
         if let center = vm.center {
-            print("updating")
+            Task { await MainActor.run {
+                vm.center = nil
+            }}
+
             view.setCenter(center, animated: true)
         }
         
@@ -43,7 +46,9 @@ struct MapView: UIViewRepresentable {
             view.removeOverlays(view.overlays)
         }
         
-        view.addOverlays(tiles)
+        if vm.showTiles {
+            view.addOverlays(tiles)
+        }
     }
 
     class Coordinator: NSObject, MKMapViewDelegate {
@@ -63,7 +68,6 @@ struct MapView: UIViewRepresentable {
         nonisolated func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
             Task { await MainActor.run {
                 vm.shouldUpdateView = false
-                print("updating region")
                 vm.region = mapView.region
             }}
         }

@@ -20,15 +20,34 @@ struct TilesView: View {
                     .task {
                         await vm.loadTiles()
                     }
+
+                VStack {
+                    Spacer()
+                    HStack {
+                        Spacer()
+                        Button {
+                            vm.showTiles.toggle()
+                        } label: {
+                            Text("Tiles")
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 6)
+                                .background(.indigo.opacity(0.5))
+                                .cornerRadius(5)
+                        }
+                        .padding()
+                    }
+                }
             }
         }
-        .ignoresSafeArea()
     }
     
     @MainActor
     class ViewModel: NSObject, CLLocationManagerDelegate, ObservableObject {
         @Published var center: CLLocationCoordinate2D?
         @Published var tiles: [MKMultiPolygon]?
+        @Published var showTiles: Bool = false
+
         var region: MKCoordinateRegion?
         var shouldUpdateView: Bool = true
 
@@ -71,6 +90,6 @@ struct TilesView: View {
             } catch {
                 print(error)
             }
-        }
+        }        
     }
 }
