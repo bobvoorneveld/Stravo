@@ -17,6 +17,7 @@ struct MainView: View {
                     Label("Tiles", systemImage: "checkerboard.rectangle")
                 }
         }
+        .ignoresSafeArea()
     }
     
     class ViewModel: ObservableObject {

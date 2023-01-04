@@ -15,15 +15,6 @@ struct MapView: UIViewRepresentable {
         let map = MKMapView(frame: .zero)
         map.showsUserLocation = true
         map.delegate = context.coordinator
-        
-        let decoder = MKGeoJSONDecoder()
-        let geojson = try! decoder.decode(geojsonTest)
-        
-        if let polygons = geojson as? [MKMultiPolygon] {
-            map.addOverlays(polygons)
-        }
-        
-//        map.addOverlays(geojson)
         return map
     }
 
@@ -38,21 +29,21 @@ struct MapView: UIViewRepresentable {
             view.setCenter(center, animated: true)
         }
         
-//        if let tiles = vm.tiles {
-//            addTiles(view, tiles: tiles)
-//        }
+        if let tiles = vm.tiles {
+            addTiles(view, tiles: tiles)
+        }
     }
     
     func makeCoordinator() -> Coordinator {
         Coordinator(vm)
     }
 
-    func addTiles(_ view: MKMapView, tiles: MKMultiPolygon) {
+    func addTiles(_ view: MKMapView, tiles: [MKMultiPolygon]) {
         if !view.overlays.isEmpty {
             view.removeOverlays(view.overlays)
         }
         
-        view.addOverlay(tiles)
+        view.addOverlays(tiles)
     }
 
     class Coordinator: NSObject, MKMapViewDelegate {
@@ -63,7 +54,7 @@ struct MapView: UIViewRepresentable {
         }
 
         func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-            let renderer = MKMultiPolygonRenderer(overlay: overlay)
+            let renderer = ZoomingMultiPolylineRenderer(overlay: overlay, mapView: mapView, polylineWidth: 10)
             renderer.fillColor = UIColor.systemIndigo.withAlphaComponent(0.4)
             renderer.strokeColor = UIColor.systemIndigo.withAlphaComponent(0.6)
             return renderer
@@ -76,6 +67,45 @@ struct MapView: UIViewRepresentable {
                 vm.region = mapView.region
             }}
         }
+    }
+}
+
+public extension MKMapView {
+
+    func metersToPoints(meters: Double) -> Double {
+
+        let deltaPoints = 500.0
+
+        let point1 = CGPoint(x: 0, y: 0)
+        let coordinate1 = convert(point1, toCoordinateFrom: self)
+        let location1 = CLLocation(latitude: coordinate1.latitude, longitude: coordinate1.longitude)
+
+        let point2 = CGPoint(x: 0, y: deltaPoints)
+        let coordinate2 = convert(point2, toCoordinateFrom: self)
+        let location2 = CLLocation(latitude: coordinate2.latitude, longitude: coordinate2.longitude)
+
+        let deltaMeters = location1.distance(from: location2)
+
+        let pointsPerMeter = deltaPoints / deltaMeters
+
+        return meters * pointsPerMeter
+    }
+}
+
+public class ZoomingMultiPolylineRenderer : MKMultiPolygonRenderer {
+
+    private var mapView: MKMapView!
+    private var polylineWidth: Double! // Meters
+
+    convenience public init(overlay: MKOverlay, mapView: MKMapView, polylineWidth: Double) {
+        self.init(overlay: overlay)
+        self.mapView = mapView
+        self.polylineWidth = polylineWidth
+    }
+
+    override public func draw(_ mapRect: MKMapRect, zoomScale: MKZoomScale, in context: CGContext) {
+        self.lineWidth = CGFloat(mapView.metersToPoints(meters: polylineWidth))
+        super.draw(mapRect, zoomScale: zoomScale, in: context)
     }
 }
 

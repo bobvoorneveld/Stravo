@@ -20,7 +20,6 @@ struct TilesView: View {
                     .task {
                         await vm.loadTiles()
                     }
-                Text(vm.region.debugDescription)
             }
         }
         .ignoresSafeArea()
@@ -29,7 +28,7 @@ struct TilesView: View {
     @MainActor
     class ViewModel: NSObject, CLLocationManagerDelegate, ObservableObject {
         @Published var center: CLLocationCoordinate2D?
-        @Published var tiles: MKMultiPolygon?
+        @Published var tiles: [MKMultiPolygon]?
         var region: MKCoordinateRegion?
         var shouldUpdateView: Bool = true
 
@@ -51,55 +50,27 @@ struct TilesView: View {
         }
         
         func loadTiles() async {
-            var request = URLRequest(url: URL(string: "http://d1de-2a02-a446-ae5d-1-a580-e4e6-85a-e141.ngrok.io/activities/tiles")!)
+            var request = URLRequest(url: URL(string: "http://dbd1-2a02-a446-ae5d-1-8505-d6f6-5c81-11bd.ngrok.io/activities/tiles")!)
             request.setValue("Bearer \(userStore.token!)", forHTTPHeaderField: "Authorization")
             
             do {
                 let (data, response) = try await URLSession.shared.data(for: request)
                 
                 if let urlResponse = response as? HTTPURLResponse, urlResponse.statusCode != 200 {
-                    print(urlResponse.statusCode)
                     throw StravoCloudError.invalidResponse
                 }
-                let polygons = try JSONDecoder().decode(Polygons.self, from: data)
-                let regex = #/Polygon\(\((?<coords>(((-?\d+.\d+) (-?\d+.\d+))(, )?)+)/#
                 
-                var mapPolys = [MKPolygon]()
+                let decoder = MKGeoJSONDecoder()
+                let geojson = try decoder.decode(data)
                 
-                for poly in polygons.polygons {
-                    guard let match = poly.firstMatch(of: regex) else {
-                        continue
+                if let polygons = geojson as? [MKMultiPolygon] {
+                    await MainActor.run {
+                        self.tiles = polygons
                     }
-                    let coords = match.coords.split(separator: ", ")
-                    var locationCoords = [CLLocationCoordinate2D]()
-                    for coord in coords {
-                        let latlng = coord.split(separator: " ")
-                        locationCoords.append(CLLocationCoordinate2D(latitude: Double(latlng[1])!, longitude: Double(latlng[0])!))
-                    }
-                    
-                    mapPolys.append(MKPolygon(coordinates: locationCoords, count: locationCoords.count))
-                }
-                
-                MKMultiPolygon(mapPolys)
-                
-                await MainActor.run {
-                    self.tiles = MKMultiPolygon(mapPolys)
                 }
             } catch {
                 print(error)
             }
         }
     }
-    
-    struct Polygons: Decodable {
-        let polygons: [String]
-    }
 }
-
-
-//struct TilesView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MainView()
-//    }
-//}
-
