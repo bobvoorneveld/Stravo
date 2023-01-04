@@ -21,10 +21,24 @@ struct TilesView: View {
                         await vm.loadTiles()
                     }
 
-                VStack {
+                HStack {
                     Spacer()
-                    HStack {
+
+                    VStack(alignment: .trailing) {
                         Spacer()
+                        
+                        Button {
+                            vm.setCenter()
+                        } label: {
+                            Image(systemName: "location")
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 6)
+                                .background(.indigo.opacity(0.7))
+                                .cornerRadius(5)
+                        }
+                        .padding(.bottom)
+
                         Button {
                             vm.showTiles.toggle()
                         } label: {
@@ -32,11 +46,12 @@ struct TilesView: View {
                                 .foregroundColor(.white)
                                 .padding(.horizontal, 12)
                                 .padding(.vertical, 6)
-                                .background(.indigo.opacity(0.5))
+                                .background(.indigo.opacity(0.7))
                                 .cornerRadius(5)
                         }
-                        .padding()
+                        .padding(.bottom)
                     }
+                    .padding(.trailing)
                 }
             }
         }
@@ -53,6 +68,8 @@ struct TilesView: View {
 
         private let manager = CLLocationManager()
         private let userStore: UserStore
+        
+        private var userLocations = [CLLocation]()
 
         init(userStore: UserStore) {
             self.userStore = userStore
@@ -63,9 +80,18 @@ struct TilesView: View {
             manager.startUpdatingLocation()
         }
         
+        func add(locations: [CLLocation]) async {
+            userLocations.append(contentsOf: locations)
+        }
+        
+        func setCenter() {
+            center = userLocations.last.map { $0.coordinate }
+        }
+        
         nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-            Task { await MainActor.run { center = locations.last.map { $0.coordinate } } }            
-            manager.stopUpdatingLocation()
+            Task {
+                await add(locations: locations)
+            }
         }
         
         func loadTiles() async {
