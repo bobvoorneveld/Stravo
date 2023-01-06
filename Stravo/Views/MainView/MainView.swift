@@ -10,14 +10,23 @@ import SwiftUI
 struct MainView: View {
     @StateObject var vm: ViewModel
 
+    @State private var activeTab = 0
+
     var body: some View {
-        TabView {
-            TilesView(vm: .init(userStore: vm.userStore))
+        TabView(selection: $activeTab) {
+            TilesNavigationView(vm: .init(userStore: vm.userStore))
+                .tag(0)
                 .tabItem {
-                    Label("Tiles", systemImage: "checkerboard.rectangle")
+                    Label("Map", systemImage: "map")
+                }
+            
+            Text("Test")
+                .tag(1)
+                .tabItem {
+                    Text("Route")
                 }
         }
-        .ignoresSafeArea()
+        .tint(.indigo)
     }
     
     class ViewModel: ObservableObject {

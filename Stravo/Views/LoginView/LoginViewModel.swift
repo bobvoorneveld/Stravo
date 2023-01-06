@@ -29,7 +29,7 @@ extension LoginView {
         @MainActor
         func login() async {
             loading = true
-            var request = URLRequest(url: URL(string: "http://d1de-2a02-a446-ae5d-1-a580-e4e6-85a-e141.ngrok.io/users/token/login")!)
+            var request = URLRequest(url: URL(string: "http://602e-2a02-a446-ae5d-1-dc3-3f17-3633-159f.ngrok.io/users/token/login")!)
             request.httpMethod = "POST"
             let token = "\(username):\(password)".data(using: .utf8)!.base64EncodedString()
             request.setValue("Basic \(token)", forHTTPHeaderField: "Authorization")

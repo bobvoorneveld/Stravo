@@ -28,6 +28,16 @@ class UserStore: ObservableObject {
         username = credentials.username
         token = credentials.token
     }
+    
+    func logout() {
+        guard let username else {
+            return
+        }
+        keychain[username] = nil
+        name = nil
+        token = nil
+        self.username = nil
+    }
 }
 
 struct Credentials: Decodable {
