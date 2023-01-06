@@ -16,6 +16,7 @@ extension TilesView {
     class ViewModel: NSObject, CLLocationManagerDelegate, ObservableObject {
         @Published var showLocationButton = true
         @Published var showTilesButton = true
+        @Published var recordButtonText = "Record"
 
         let mapVM = MapView.ViewModel()
 
@@ -35,6 +36,17 @@ extension TilesView {
                 }
                 .store(in: &subscriptions)
             
+            routeManager.statusPublisher()
+                .removeDuplicates()
+                .map {
+                    switch $0 {
+                    case .initialized, .stopped: return "Record"
+                    case .paused: return "Continue"
+                    case .monitoring: return "Pause"
+                    }
+                }
+                .assign(to: &$recordButtonText)
+            
             mapVM.$userTrackingMode.removeDuplicates()
                 .map { $0 != .follow }
                 .assign(to: &$showLocationButton)
@@ -45,7 +57,7 @@ extension TilesView {
         
                         
         func toggleRecording() {
-            if routeManager.status == .initialized || routeManager.status == .paused {
+            if routeManager.status != .monitoring {
                 routeManager.startMonitoring()
             } else {
                 routeManager.stopMonitoring()

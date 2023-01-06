@@ -62,7 +62,7 @@ struct TilesView: View {
                     Button {
                         vm.toggleRecording()
                     } label: {
-                        Text("Record")
+                        Text(vm.recordButtonText)
                             .foregroundColor(.white)
                             .padding()
                             .background(.indigo.opacity(0.7))
