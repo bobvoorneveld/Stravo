@@ -20,18 +20,13 @@ struct MapView: UIViewRepresentable {
 
     func updateUIView(_ view: MKMapView, context: Context) {
         view.delegate = context.coordinator
-        guard vm.shouldUpdateView else {
-            vm.shouldUpdateView = true
+        view.userTrackingMode = vm.userTrackingMode
+
+        guard context.coordinator.shouldUpdateView else {
+            context.coordinator.shouldUpdateView = true
             return
         }
-        if let center = vm.center {
-            Task { await MainActor.run {
-                vm.center = nil
-            }}
 
-            view.setCenter(center, animated: true)
-        }
-        
         addOverlays(view)
     }
     
@@ -55,6 +50,8 @@ struct MapView: UIViewRepresentable {
 
     class Coordinator: NSObject, MKMapViewDelegate {
         let vm: TilesView.ViewModel
+        var pendingRegionChange = false
+        var shouldUpdateView = true
         
         init(_ vm: TilesView.ViewModel) {
             self.vm = vm
@@ -74,12 +71,30 @@ struct MapView: UIViewRepresentable {
             }
             fatalError("Unknown overlay \(overlay)")
         }
+        
+        func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+            if mapView.userTrackingMode != .none && !pendingRegionChange {
+                mapView.userTrackingMode = .none
+                
+                Task {
+                    await MainActor.run { vm.userTrackingMode = .none }
+                }
+            }
+            pendingRegionChange = false
+        }
             
-        nonisolated func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+            shouldUpdateView = false
             Task { await MainActor.run {
-                vm.shouldUpdateView = false
                 vm.region = mapView.region
             }}
+        }
+        
+        func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+            if mapView.userTrackingMode != .none {
+                pendingRegionChange = true
+                mapView.setCenter(userLocation.location!.coordinate, animated: true)
+            }
         }
     }
 }

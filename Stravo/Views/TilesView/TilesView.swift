@@ -27,17 +27,19 @@ struct TilesView: View {
                     VStack(alignment: .trailing) {
                         Spacer()
                         
-                        Button {
-                            vm.setCenter()
-                        } label: {
-                            Image(systemName: "location")
-                                .foregroundColor(.white)
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 6)
-                                .background(.indigo.opacity(0.7))
-                                .cornerRadius(5)
+                        if vm.userTrackingMode == .none {
+                            Button {
+                                vm.userTrackingMode = .follow
+                            } label: {
+                                Image(systemName: "location")
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 6)
+                                    .background(.indigo.opacity(0.7))
+                                    .cornerRadius(5)
+                            }
+                            .padding(.bottom)
                         }
-                        .padding(.bottom)
 
                         Button {
                             vm.showTiles.toggle()

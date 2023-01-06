@@ -12,13 +12,12 @@ import MapKit
 extension TilesView {
     @MainActor
     class ViewModel: NSObject, CLLocationManagerDelegate, ObservableObject {
-        @Published var center: CLLocationCoordinate2D?
         @Published var tiles: [MKMultiPolygon]?
         @Published var track: MKPolyline?
         @Published var showTiles: Bool = false
+        @Published var userTrackingMode: MKUserTrackingMode = .none
 
         var region: MKCoordinateRegion?
-        var shouldUpdateView: Bool = true
 
         private let manager = CLLocationManager()
         private let userStore: UserStore
@@ -26,7 +25,7 @@ extension TilesView {
         private var isMonitoring = false
         
         private var userLocations = [CLLocation]()
-
+        
         init(userStore: UserStore) {
             self.userStore = userStore
             super.init()
@@ -41,11 +40,7 @@ extension TilesView {
             let coordinates = userLocations.map { $0.coordinate }
             track = MKPolyline(coordinates: coordinates, count: coordinates.count)
         }
-        
-        func setCenter() {
-            center = userLocations.last.map { $0.coordinate }
-        }
-        
+                        
         func toggleRecording() {
             if isMonitoring {
                 manager.stopUpdatingLocation()
