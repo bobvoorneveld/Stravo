@@ -7,6 +7,8 @@
 
 import SwiftUI
 import MapKit
+import Combine
+import Polyline
 
 
 extension TilesView {
@@ -19,47 +21,32 @@ extension TilesView {
 
         var region: MKCoordinateRegion?
 
-        private let manager = CLLocationManager()
         private let userStore: UserStore
-        
-        private var isMonitoring = false
-        
-        private var userLocations = [CLLocation]()
+        private let routeManager = RouteManager()
+
+        private var subscriptions = Set<AnyCancellable>()
         
         init(userStore: UserStore) {
             self.userStore = userStore
             super.init()
-            manager.delegate = self
-            manager.desiredAccuracy = kCLLocationAccuracyBest
-            manager.allowsBackgroundLocationUpdates = true
-            manager.requestAlwaysAuthorization()
+            
+            routeManager.polylinePublisher()
+                .removeDuplicates(by: { $0.encodedPolyline == $1.encodedPolyline })
+                .sink {
+                    print($0.encodedPolyline)
+                }
+                .store(in: &subscriptions)
         }
         
-        func add(locations: [CLLocation]) async {
-            userLocations.append(contentsOf: locations)
-            let coordinates = userLocations.map { $0.coordinate }
-            track = MKPolyline(coordinates: coordinates, count: coordinates.count)
-        }
                         
         func toggleRecording() {
-            if isMonitoring {
-                manager.stopUpdatingLocation()
-                manager.showsBackgroundLocationIndicator = false
-                userLocations = []
-                track = nil
+            if routeManager.status == .initialized || routeManager.status == .paused {
+                routeManager.startMonitoring()
             } else {
-                manager.showsBackgroundLocationIndicator = true
-                manager.startUpdatingLocation()
-            }
-            isMonitoring.toggle()
-        }
-        
-        nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-            Task {
-                await add(locations: locations)
+                routeManager.stopMonitoring()
             }
         }
-        
+                
         func loadTiles() async {
             var request = URLRequest(url: URL(string: "http://dbd1-2a02-a446-ae5d-1-8505-d6f6-5c81-11bd.ngrok.io/activities/tiles")!)
             request.setValue("Bearer \(userStore.token!)", forHTTPHeaderField: "Authorization")

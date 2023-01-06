@@ -22,6 +22,9 @@
 		C4EBF7CF2965D717008EE6C3 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EBF7CE2965D717008EE6C3 /* LoginViewModel.swift */; };
 		C4EBF7D12965D74D008EE6C3 /* MKMapView+Zooming.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EBF7D02965D74D008EE6C3 /* MKMapView+Zooming.swift */; };
 		C4EBF7D42965D795008EE6C3 /* ZoomingMultiPolygonRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EBF7D32965D795008EE6C3 /* ZoomingMultiPolygonRenderer.swift */; };
+		C4EBF7D929682DBE008EE6C3 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EBF7D829682DBE008EE6C3 /* LocationManager.swift */; };
+		C4EBF7DC29683625008EE6C3 /* Polyline in Frameworks */ = {isa = PBXBuildFile; productRef = C4EBF7DB29683625008EE6C3 /* Polyline */; };
+		C4EBF7DE29683813008EE6C3 /* RouteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EBF7DD29683813008EE6C3 /* RouteManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +44,8 @@
 		C4EBF7CE2965D717008EE6C3 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		C4EBF7D02965D74D008EE6C3 /* MKMapView+Zooming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MKMapView+Zooming.swift"; sourceTree = "<group>"; };
 		C4EBF7D32965D795008EE6C3 /* ZoomingMultiPolygonRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingMultiPolygonRenderer.swift; sourceTree = "<group>"; };
+		C4EBF7D829682DBE008EE6C3 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
+		C4EBF7DD29683813008EE6C3 /* RouteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4EBF7DC29683625008EE6C3 /* Polyline in Frameworks */,
 				C4478B9A29647BE7004622D8 /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -74,6 +80,7 @@
 		C4358B1929642F9C004A39E7 /* Stravo */ = {
 			isa = PBXGroup;
 			children = (
+				C4EBF7D729682DA6008EE6C3 /* Managers */,
 				C4358B1A29642F9C004A39E7 /* StravoApp.swift */,
 				C4EBF7CC2965D700008EE6C3 /* Views */,
 				C4EBF7C92965D6BB008EE6C3 /* Stores */,
@@ -165,6 +172,15 @@
 			path = MainView;
 			sourceTree = "<group>";
 		};
+		C4EBF7D729682DA6008EE6C3 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				C4EBF7D829682DBE008EE6C3 /* LocationManager.swift */,
+				C4EBF7DD29683813008EE6C3 /* RouteManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -183,6 +199,7 @@
 			name = Stravo;
 			packageProductDependencies = (
 				C4478B9929647BE7004622D8 /* KeychainAccess */,
+				C4EBF7DB29683625008EE6C3 /* Polyline */,
 			);
 			productName = Stravo;
 			productReference = C4358B1729642F9C004A39E7 /* Stravo.app */;
@@ -215,6 +232,7 @@
 			packageReferences = (
 				C4478B9829647BE7004622D8 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				C4478BA52964E0CC004622D8 /* XCRemoteSwiftPackageReference "fluent-postgis" */,
+				C4EBF7DA29683625008EE6C3 /* XCRemoteSwiftPackageReference "Polyline" */,
 			);
 			productRefGroup = C4358B1829642F9C004A39E7 /* Products */;
 			projectDirPath = "";
@@ -247,6 +265,8 @@
 				C4EBF7D42965D795008EE6C3 /* ZoomingMultiPolygonRenderer.swift in Sources */,
 				C4358B2929642FD1004A39E7 /* LoginView.swift in Sources */,
 				C4478B9C29647C98004622D8 /* MainView.swift in Sources */,
+				C4EBF7DE29683813008EE6C3 /* RouteManager.swift in Sources */,
+				C4EBF7D929682DBE008EE6C3 /* LocationManager.swift in Sources */,
 				C4EBF7C82965D688008EE6C3 /* TilesViewModel.swift in Sources */,
 				C4EBF7C52965D62B008EE6C3 /* View+CornerRadius.swift in Sources */,
 				C4EBF7CB2965D6C4008EE6C3 /* UserStore.swift in Sources */,
@@ -482,6 +502,14 @@
 				minimumVersion = 0.3.0;
 			};
 		};
+		C4EBF7DA29683625008EE6C3 /* XCRemoteSwiftPackageReference "Polyline" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/raphaelmor/Polyline.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -489,6 +517,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C4478B9829647BE7004622D8 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
+		};
+		C4EBF7DB29683625008EE6C3 /* Polyline */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4EBF7DA29683625008EE6C3 /* XCRemoteSwiftPackageReference "Polyline" */;
+			productName = Polyline;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

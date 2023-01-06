@@ -20,7 +20,10 @@ struct MapView: UIViewRepresentable {
 
     func updateUIView(_ view: MKMapView, context: Context) {
         view.delegate = context.coordinator
-        view.userTrackingMode = vm.userTrackingMode
+        if view.userTrackingMode != vm.userTrackingMode {
+            context.coordinator.pendingRegionChange = true
+            view.userTrackingMode = vm.userTrackingMode
+        }
 
         guard context.coordinator.shouldUpdateView else {
             context.coordinator.shouldUpdateView = true
@@ -75,7 +78,6 @@ struct MapView: UIViewRepresentable {
         func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
             if mapView.userTrackingMode != .none && !pendingRegionChange {
                 mapView.userTrackingMode = .none
-                
                 Task {
                     await MainActor.run { vm.userTrackingMode = .none }
                 }
