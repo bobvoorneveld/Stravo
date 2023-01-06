@@ -8,6 +8,7 @@
 import Foundation
 import Combine
 import MapKit
+import Polyline
 
 class TileManager {
     private let userStore: UserStore
@@ -16,9 +17,24 @@ class TileManager {
         self.userStore = userStore
     }
 
-    func loadTiles() async throws -> [MKMultiPolygon]? {
-        var request = URLRequest(url: URL(string: "http://dbd1-2a02-a446-ae5d-1-8505-d6f6-5c81-11bd.ngrok.io/activities/tiles")!)
+    func loadTiles() async throws -> [MKOverlay]? {
+        try await fetchTiles()
+    }
+    
+    func checkForNewTiles(coordinates: [CLLocationCoordinate2D]) async throws -> [MKOverlay]? {
+        try await fetchTiles(coordinates: coordinates)
+    }
+    
+    private func fetchTiles(coordinates: [CLLocationCoordinate2D]? = nil) async throws -> [MKOverlay]? {
+        var request = URLRequest(url: URL(string: "http://602e-2a02-a446-ae5d-1-dc3-3f17-3633-159f.ngrok.io/activities/tiles")!)
         request.setValue("Bearer \(userStore.token!)", forHTTPHeaderField: "Authorization")
+        
+        if let coordinates {
+            request.httpMethod = "POST"
+            let encoder = JSONEncoder()
+            request.httpBody = try encoder.encode(TilesPost(coordinates: coordinates))
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        }
         
         let (data, response) = try await URLSession.shared.data(for: request)
         
@@ -29,6 +45,14 @@ class TileManager {
         let decoder = MKGeoJSONDecoder()
         let geojson = try decoder.decode(data)
         
-        return geojson as? [MKMultiPolygon]
+        return geojson as? [MKOverlay]
+    }
+    
+    private struct TilesPost: Encodable {
+        let polyline: String
+        
+        init(coordinates: [CLLocationCoordinate2D]) {
+            polyline = Polyline(coordinates: coordinates).encodedPolyline
+        }
     }
 }

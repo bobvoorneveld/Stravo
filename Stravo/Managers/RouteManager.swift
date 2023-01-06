@@ -8,11 +8,11 @@
 import Foundation
 import CoreLocation
 import Combine
-import Polyline
+import MapKit
 
 
 class RouteManager: NSObject {
-    private let polylineSubject = PassthroughSubject<Polyline, Never>()
+    private let coordinateSubject = CurrentValueSubject<[CLLocationCoordinate2D], Never>([])
 
     enum Status {
         case initialized, monitoring, paused, stopped
@@ -29,11 +29,6 @@ class RouteManager: NSObject {
             updateCoordinates()
         }
     }
-    private var coordinates = [CLLocationCoordinate2D]() {
-        didSet {
-            createPolyline()
-        }
-    }
     
     override init() {
         super.init()
@@ -46,8 +41,14 @@ class RouteManager: NSObject {
         }
     }
     
-    func polylinePublisher() -> AnyPublisher<Polyline, Never> {
-        polylineSubject.eraseToAnyPublisher()
+    func coordinatePublisher() -> AnyPublisher<[CLLocationCoordinate2D], Never> {
+        coordinateSubject.eraseToAnyPublisher().removeDuplicates().eraseToAnyPublisher()
+    }
+    
+    func trackPublisher() -> AnyPublisher<MKPolyline?, Never> {
+        coordinateSubject.eraseToAnyPublisher().removeDuplicates()
+            .map { MKPolyline(coordinates: $0, count: $0.count) }
+            .eraseToAnyPublisher()
     }
     
     func statusPublisher() -> AnyPublisher<Status, Never> {
@@ -74,28 +75,33 @@ class RouteManager: NSObject {
     
     private func updateCoordinates() {
         guard locations.count > 1 else {
-            coordinates = locations.map { $0.coordinate }
+            coordinateSubject.send(locations.map { $0.coordinate })
             return
         }
 
         var coords = [locations[0].coordinate]
         
-        let epsilon = 0.00001
         for location in locations[1...] {
-            if abs(coords.last!.latitude - location.coordinate.latitude) >= epsilon && abs(coords.last!.longitude - location.coordinate.longitude) >= epsilon {
+            if coords.last != location.coordinate {
                 coords.append(location.coordinate)
             }
         }
-        coordinates = coords
-    }
-    
-    private func createPolyline() {
-        polylineSubject.send(Polyline(coordinates: coordinates))
+        coordinateSubject.send(coords)
     }
 }
 
 extension RouteManager : CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         self.locations.append(contentsOf: locations)
+    }
+}
+
+extension CLLocationCoordinate2D: Equatable {
+    public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
+        let epsilon = 0.00001
+        if abs(lhs.latitude - rhs.latitude) <= epsilon && abs(lhs.longitude - rhs.longitude) <= epsilon {
+            return true
+        }
+        return false
     }
 }

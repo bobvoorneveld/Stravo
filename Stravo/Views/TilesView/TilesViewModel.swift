@@ -31,12 +31,16 @@ extension TilesView {
             self.tileManager = TileManager(userStore: userStore)
             super.init()
             
-            routeManager.polylinePublisher()
-                .removeDuplicates(by: { $0.encodedPolyline == $1.encodedPolyline })
-                .sink {
-                    print($0.encodedPolyline)
-                }
+            routeManager.coordinatePublisher()
+                .filter { !$0.isEmpty }
+                .removeDuplicates()
+                .sink(receiveValue: { [unowned self] in
+                    self.fetchNewTiles(coordinates: $0)
+                })
                 .store(in: &subscriptions)
+            
+            routeManager.trackPublisher()
+                .assign(to: &mapVM.$track)
             
             routeManager.statusPublisher()
                 .removeDuplicates()
@@ -76,9 +80,21 @@ extension TilesView {
                 
         func loadTiles() async {
             do {
-                mapVM.tiles = try await tileManager.loadTiles()
+                mapVM.currentTilesOverlay = try await tileManager.loadTiles()
             } catch {
                 print(error)
+            }
+        }
+        
+        func fetchNewTiles(coordinates: [CLLocationCoordinate2D]) {
+            Task {
+                print("fetching new tiles")
+                do {
+                    let tiles = try await tileManager.checkForNewTiles(coordinates: coordinates)
+                    mapVM.newTilesOverlay = tiles
+                } catch {
+                    print(error)
+                }
             }
         }
     }

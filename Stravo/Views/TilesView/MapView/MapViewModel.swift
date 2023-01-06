@@ -12,7 +12,8 @@ import MapKit
 
 extension MapView {
     class ViewModel: ObservableObject {
-        @Published var tiles: [MKMultiPolygon]?
+        @Published var currentTilesOverlay: [MKOverlay]?
+        @Published var newTilesOverlay: [MKOverlay]?
         @Published var track: MKPolyline?
         @Published var showTiles: Bool = false
         @Published var userTrackingMode: MKUserTrackingMode = .none
