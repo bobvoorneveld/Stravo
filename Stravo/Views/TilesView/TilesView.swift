@@ -16,7 +16,7 @@ struct TilesView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                MapView(vm: vm)
+                MapView(vm: vm.mapVM)
                     .task {
                         await vm.loadTiles()
                     }
@@ -27,9 +27,9 @@ struct TilesView: View {
                     VStack(alignment: .trailing) {
                         Spacer()
                         
-                        if vm.userTrackingMode == .none {
+                        if vm.showLocationButton {
                             Button {
-                                vm.userTrackingMode = .follow
+                                vm.trackUserLocation()
                             } label: {
                                 Image(systemName: "location")
                                     .foregroundColor(.white)
@@ -42,7 +42,7 @@ struct TilesView: View {
                         }
 
                         Button {
-                            vm.showTiles.toggle()
+                            vm.toggleTiles()
                         } label: {
                             Text("Tiles")
                                 .foregroundColor(.white)
@@ -62,7 +62,7 @@ struct TilesView: View {
                     Button {
                         vm.toggleRecording()
                     } label: {
-                        Text(vm.track != nil ? "Stop" : "Record")
+                        Text("Record")
                             .foregroundColor(.white)
                             .padding()
                             .background(.indigo.opacity(0.7))

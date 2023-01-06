@@ -25,6 +25,7 @@
 		C4EBF7D929682DBE008EE6C3 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EBF7D829682DBE008EE6C3 /* LocationManager.swift */; };
 		C4EBF7DC29683625008EE6C3 /* Polyline in Frameworks */ = {isa = PBXBuildFile; productRef = C4EBF7DB29683625008EE6C3 /* Polyline */; };
 		C4EBF7DE29683813008EE6C3 /* RouteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EBF7DD29683813008EE6C3 /* RouteManager.swift */; };
+		C4EBF7E029684454008EE6C3 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EBF7DF29684454008EE6C3 /* MapViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		C4EBF7D32965D795008EE6C3 /* ZoomingMultiPolygonRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingMultiPolygonRenderer.swift; sourceTree = "<group>"; };
 		C4EBF7D829682DBE008EE6C3 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		C4EBF7DD29683813008EE6C3 /* RouteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteManager.swift; sourceTree = "<group>"; };
+		C4EBF7DF29684454008EE6C3 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -152,6 +154,7 @@
 			children = (
 				C4478BA329648DED004622D8 /* MapView.swift */,
 				C4EBF7D32965D795008EE6C3 /* ZoomingMultiPolygonRenderer.swift */,
+				C4EBF7DF29684454008EE6C3 /* MapViewModel.swift */,
 			);
 			path = MapView;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 				C4EBF7C52965D62B008EE6C3 /* View+CornerRadius.swift in Sources */,
 				C4EBF7CB2965D6C4008EE6C3 /* UserStore.swift in Sources */,
 				C4EBF7D12965D74D008EE6C3 /* MKMapView+Zooming.swift in Sources */,
+				C4EBF7E029684454008EE6C3 /* MapViewModel.swift in Sources */,
 				C4358B1D29642F9C004A39E7 /* ContentView.swift in Sources */,
 				C4EBF7CF2965D717008EE6C3 /* LoginViewModel.swift in Sources */,
 				C4358B1B29642F9C004A39E7 /* StravoApp.swift in Sources */,

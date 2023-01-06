@@ -14,12 +14,10 @@ import Polyline
 extension TilesView {
     @MainActor
     class ViewModel: NSObject, CLLocationManagerDelegate, ObservableObject {
-        @Published var tiles: [MKMultiPolygon]?
-        @Published var track: MKPolyline?
-        @Published var showTiles: Bool = false
-        @Published var userTrackingMode: MKUserTrackingMode = .none
+        @Published var showLocationButton = true
+        @Published var showTilesButton = true
 
-        var region: MKCoordinateRegion?
+        let mapVM = MapView.ViewModel()
 
         private let userStore: UserStore
         private let routeManager = RouteManager()
@@ -36,6 +34,13 @@ extension TilesView {
                     print($0.encodedPolyline)
                 }
                 .store(in: &subscriptions)
+            
+            mapVM.$userTrackingMode.removeDuplicates()
+                .map { $0 != .follow }
+                .assign(to: &$showLocationButton)
+            
+            mapVM.$showTiles
+                .assign(to: &$showTilesButton)
         }
         
                         
@@ -45,6 +50,14 @@ extension TilesView {
             } else {
                 routeManager.stopMonitoring()
             }
+        }
+        
+        func trackUserLocation() {
+            mapVM.userTrackingMode = .follow
+        }
+        
+        func toggleTiles() {
+            mapVM.showTiles.toggle()
         }
                 
         func loadTiles() async {
@@ -63,7 +76,7 @@ extension TilesView {
                 
                 if let polygons = geojson as? [MKMultiPolygon] {
                     await MainActor.run {
-                        self.tiles = polygons
+                        self.mapVM.tiles = polygons
                     }
                 }
             } catch {

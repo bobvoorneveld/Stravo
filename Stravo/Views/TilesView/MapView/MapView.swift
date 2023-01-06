@@ -9,7 +9,7 @@ import SwiftUI
 import MapKit
 
 struct MapView: UIViewRepresentable {
-    @ObservedObject var vm: TilesView.ViewModel
+    @ObservedObject var vm: ViewModel
     
     func makeUIView(context: Context) -> MKMapView {
         let map = MKMapView(frame: .zero)
@@ -52,11 +52,11 @@ struct MapView: UIViewRepresentable {
     }
 
     class Coordinator: NSObject, MKMapViewDelegate {
-        let vm: TilesView.ViewModel
+        let vm: ViewModel
         var pendingRegionChange = false
         var shouldUpdateView = true
         
-        init(_ vm: TilesView.ViewModel) {
+        init(_ vm: ViewModel) {
             self.vm = vm
         }
 
