@@ -22,11 +22,13 @@ extension TilesView {
 
         private let userStore: UserStore
         private let routeManager = RouteManager()
+        private let tileManager: TileManager
 
         private var subscriptions = Set<AnyCancellable>()
         
         init(userStore: UserStore) {
             self.userStore = userStore
+            self.tileManager = TileManager(userStore: userStore)
             super.init()
             
             routeManager.polylinePublisher()
@@ -73,24 +75,8 @@ extension TilesView {
         }
                 
         func loadTiles() async {
-            var request = URLRequest(url: URL(string: "http://dbd1-2a02-a446-ae5d-1-8505-d6f6-5c81-11bd.ngrok.io/activities/tiles")!)
-            request.setValue("Bearer \(userStore.token!)", forHTTPHeaderField: "Authorization")
-            
             do {
-                let (data, response) = try await URLSession.shared.data(for: request)
-                
-                if let urlResponse = response as? HTTPURLResponse, urlResponse.statusCode != 200 {
-                    throw StravoCloudError.invalidResponse
-                }
-                
-                let decoder = MKGeoJSONDecoder()
-                let geojson = try decoder.decode(data)
-                
-                if let polygons = geojson as? [MKMultiPolygon] {
-                    await MainActor.run {
-                        self.mapVM.tiles = polygons
-                    }
-                }
+                mapVM.tiles = try await tileManager.loadTiles()
             } catch {
                 print(error)
             }

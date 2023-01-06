@@ -26,6 +26,7 @@
 		C4EBF7DC29683625008EE6C3 /* Polyline in Frameworks */ = {isa = PBXBuildFile; productRef = C4EBF7DB29683625008EE6C3 /* Polyline */; };
 		C4EBF7DE29683813008EE6C3 /* RouteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EBF7DD29683813008EE6C3 /* RouteManager.swift */; };
 		C4EBF7E029684454008EE6C3 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EBF7DF29684454008EE6C3 /* MapViewModel.swift */; };
+		C4EBF7E229684A48008EE6C3 /* TileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EBF7E129684A48008EE6C3 /* TileManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		C4EBF7D829682DBE008EE6C3 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		C4EBF7DD29683813008EE6C3 /* RouteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteManager.swift; sourceTree = "<group>"; };
 		C4EBF7DF29684454008EE6C3 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
+		C4EBF7E129684A48008EE6C3 /* TileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +182,7 @@
 			children = (
 				C4EBF7D829682DBE008EE6C3 /* LocationManager.swift */,
 				C4EBF7DD29683813008EE6C3 /* RouteManager.swift */,
+				C4EBF7E129684A48008EE6C3 /* TileManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -268,6 +271,7 @@
 				C4EBF7D42965D795008EE6C3 /* ZoomingMultiPolygonRenderer.swift in Sources */,
 				C4358B2929642FD1004A39E7 /* LoginView.swift in Sources */,
 				C4478B9C29647C98004622D8 /* MainView.swift in Sources */,
+				C4EBF7E229684A48008EE6C3 /* TileManager.swift in Sources */,
 				C4EBF7DE29683813008EE6C3 /* RouteManager.swift in Sources */,
 				C4EBF7D929682DBE008EE6C3 /* LocationManager.swift in Sources */,
 				C4EBF7C82965D688008EE6C3 /* TilesViewModel.swift in Sources */,
