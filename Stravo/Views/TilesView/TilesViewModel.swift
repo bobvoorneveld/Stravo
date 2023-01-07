@@ -18,9 +18,15 @@ extension TilesView {
         @Published var showTilesButton = true
         @Published var recordButtonText = "Record"
         @Published var loadingTiles = false
-
-
+        
         let mapVM = MapView.ViewModel()
+
+        private let scenePhaseSubject = PassthroughSubject<ScenePhase, Never>()
+        var scenePhase: ScenePhase = .background {
+            didSet {
+                scenePhaseSubject.send(scenePhase)
+            }
+        }
 
         private let userStore: UserStore
         private let routeManager = RouteManager()
@@ -35,9 +41,16 @@ extension TilesView {
             
             routeManager.coordinatePublisher()
                 .filter { !$0.isEmpty }
-                .removeDuplicates()
-                .sink(receiveValue: { [unowned self] in
-                    self.fetchNewTiles(coordinates: $0)
+                .removeDuplicates() // Do not fetch if there aren't any new coordinates
+                .combineLatest(
+                    scenePhaseSubject
+                        .eraseToAnyPublisher()
+                        .removeDuplicates()
+                )
+                .filter { $0.1 == .active } // Only fire if scene is active, no background fetches
+                .throttle(for: 10, scheduler: RunLoop.main, latest: true) // only fetch every 10 seconds
+                .sink(receiveValue: { [unowned self] coordinates, _ in
+                    fetchNewTiles(coordinates: coordinates)
                 })
                 .store(in: &subscriptions)
             

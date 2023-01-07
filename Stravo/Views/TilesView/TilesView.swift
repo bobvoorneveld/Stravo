@@ -12,6 +12,7 @@ import KeychainAccess
 
 struct TilesView: View {
     @StateObject var vm: ViewModel
+    @Environment(\.scenePhase) var scenePhase
 
     init(vm: ViewModel) {
         self._vm = StateObject(wrappedValue: vm)
@@ -63,16 +64,19 @@ struct TilesView: View {
                 }
             }
         }
+        .onChange(of: scenePhase) { newPhase in
+            vm.scenePhase = newPhase
+        }
     }
 }
 
-//struct TilesView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TabView {
-//            NavigationStack {
-//                TilesView(vm: .init(userStore: .init()))
-//                    .navigationBarTitleDisplayMode(.inline)
-//            }
-//        }
-//    }
-//}
+struct TilesView_Previews: PreviewProvider {
+    static var previews: some View {
+        TabView {
+            NavigationStack {
+                TilesView(vm: .init(userStore: .init()))
+                    .navigationBarTitleDisplayMode(.inline)
+            }
+        }
+    }
+}
