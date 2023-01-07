@@ -19,6 +19,7 @@
 		C4AE09232968C2CC00742AB8 /* TilesNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AE09222968C2CC00742AB8 /* TilesNavigationView.swift */; };
 		C4AE09252968C79B00742AB8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AE09242968C79B00742AB8 /* SettingsView.swift */; };
 		C4AE09282969638900742AB8 /* TilesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AE09272969638900742AB8 /* TilesButton.swift */; };
+		C4AE092A29696B1A00742AB8 /* StravoCloudManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AE092929696B1A00742AB8 /* StravoCloudManager.swift */; };
 		C4EBF7C52965D62B008EE6C3 /* View+CornerRadius.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EBF7C42965D62B008EE6C3 /* View+CornerRadius.swift */; };
 		C4EBF7C82965D688008EE6C3 /* TilesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EBF7C72965D688008EE6C3 /* TilesViewModel.swift */; };
 		C4EBF7CB2965D6C4008EE6C3 /* UserStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EBF7CA2965D6C4008EE6C3 /* UserStore.swift */; };
@@ -46,6 +47,7 @@
 		C4AE09222968C2CC00742AB8 /* TilesNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TilesNavigationView.swift; sourceTree = "<group>"; };
 		C4AE09242968C79B00742AB8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		C4AE09272969638900742AB8 /* TilesButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TilesButton.swift; sourceTree = "<group>"; };
+		C4AE092929696B1A00742AB8 /* StravoCloudManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StravoCloudManager.swift; sourceTree = "<group>"; };
 		C4EBF7C42965D62B008EE6C3 /* View+CornerRadius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+CornerRadius.swift"; sourceTree = "<group>"; };
 		C4EBF7C72965D688008EE6C3 /* TilesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TilesViewModel.swift; sourceTree = "<group>"; };
 		C4EBF7CA2965D6C4008EE6C3 /* UserStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStore.swift; sourceTree = "<group>"; };
@@ -200,6 +202,7 @@
 				C4EBF7D829682DBE008EE6C3 /* LocationManager.swift */,
 				C4EBF7DD29683813008EE6C3 /* RouteManager.swift */,
 				C4EBF7E129684A48008EE6C3 /* TileManager.swift */,
+				C4AE092929696B1A00742AB8 /* StravoCloudManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -291,6 +294,7 @@
 				C4478B9C29647C98004622D8 /* MainView.swift in Sources */,
 				C4EBF7E229684A48008EE6C3 /* TileManager.swift in Sources */,
 				C4AE09282969638900742AB8 /* TilesButton.swift in Sources */,
+				C4AE092A29696B1A00742AB8 /* StravoCloudManager.swift in Sources */,
 				C4EBF7DE29683813008EE6C3 /* RouteManager.swift in Sources */,
 				C4EBF7D929682DBE008EE6C3 /* LocationManager.swift in Sources */,
 				C4EBF7C82965D688008EE6C3 /* TilesViewModel.swift in Sources */,

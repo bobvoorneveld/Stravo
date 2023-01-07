@@ -53,12 +53,24 @@ struct TilesNavigationView: View {
         @Published var isRotating = 0.0
         let userStore: UserStore
         
-        init(userStore: UserStore) {
+        private let stravoCloudManager: StravoCloudManager
+        
+        init(userStore: UserStore, stravoCloudManager: StravoCloudManager) {
             self.userStore = userStore
+            self.stravoCloudManager = stravoCloudManager
         }
         
         func synchronizeTiles() {
-            isRotating = isRotating > 0 ? 0 : 360
+            isRotating = 360
+            
+            Task {
+                do {
+                    try await stravoCloudManager.syncRoutes()
+                } catch {
+                    print(error)
+                }
+                isRotating = 0
+            }
         }
     }
 }

@@ -14,7 +14,7 @@ struct MainView: View {
     
     var body: some View {
         TabView(selection: $activeTab) {
-            TilesNavigationView(vm: .init(userStore: vm.userStore))
+            TilesNavigationView(vm: .init(userStore: vm.userStore, stravoCloudManager: .init(userStore: vm.userStore)))
                 .tag(0)
                 .tabItem {
                     Label("Map", systemImage: "map")
