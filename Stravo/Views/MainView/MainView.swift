@@ -11,7 +11,7 @@ struct MainView: View {
     @StateObject var vm: ViewModel
 
     @State private var activeTab = 0
-
+    
     var body: some View {
         TabView(selection: $activeTab) {
             TilesNavigationView(vm: .init(userStore: vm.userStore))

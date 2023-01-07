@@ -18,6 +18,7 @@
 		C4478BA429648DED004622D8 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4478BA329648DED004622D8 /* MapView.swift */; };
 		C4AE09232968C2CC00742AB8 /* TilesNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AE09222968C2CC00742AB8 /* TilesNavigationView.swift */; };
 		C4AE09252968C79B00742AB8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AE09242968C79B00742AB8 /* SettingsView.swift */; };
+		C4AE09282969638900742AB8 /* TilesButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4AE09272969638900742AB8 /* TilesButton.swift */; };
 		C4EBF7C52965D62B008EE6C3 /* View+CornerRadius.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EBF7C42965D62B008EE6C3 /* View+CornerRadius.swift */; };
 		C4EBF7C82965D688008EE6C3 /* TilesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EBF7C72965D688008EE6C3 /* TilesViewModel.swift */; };
 		C4EBF7CB2965D6C4008EE6C3 /* UserStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4EBF7CA2965D6C4008EE6C3 /* UserStore.swift */; };
@@ -44,6 +45,7 @@
 		C4478BA329648DED004622D8 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		C4AE09222968C2CC00742AB8 /* TilesNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TilesNavigationView.swift; sourceTree = "<group>"; };
 		C4AE09242968C79B00742AB8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		C4AE09272969638900742AB8 /* TilesButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TilesButton.swift; sourceTree = "<group>"; };
 		C4EBF7C42965D62B008EE6C3 /* View+CornerRadius.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+CornerRadius.swift"; sourceTree = "<group>"; };
 		C4EBF7C72965D688008EE6C3 /* TilesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TilesViewModel.swift; sourceTree = "<group>"; };
 		C4EBF7CA2965D6C4008EE6C3 /* UserStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStore.swift; sourceTree = "<group>"; };
@@ -108,6 +110,14 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		C4AE09262969637D00742AB8 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				C4AE09272969638900742AB8 /* TilesButton.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		C4EBF7C32965D617008EE6C3 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -120,6 +130,7 @@
 		C4EBF7C62965D66E008EE6C3 /* TilesView */ = {
 			isa = PBXGroup;
 			children = (
+				C4AE09262969637D00742AB8 /* Views */,
 				C4EBF7D22965D779008EE6C3 /* MapView */,
 				C4478B9D2964825E004622D8 /* TilesView.swift */,
 				C4EBF7C72965D688008EE6C3 /* TilesViewModel.swift */,
@@ -279,6 +290,7 @@
 				C4358B2929642FD1004A39E7 /* LoginView.swift in Sources */,
 				C4478B9C29647C98004622D8 /* MainView.swift in Sources */,
 				C4EBF7E229684A48008EE6C3 /* TileManager.swift in Sources */,
+				C4AE09282969638900742AB8 /* TilesButton.swift in Sources */,
 				C4EBF7DE29683813008EE6C3 /* RouteManager.swift in Sources */,
 				C4EBF7D929682DBE008EE6C3 /* LocationManager.swift in Sources */,
 				C4EBF7C82965D688008EE6C3 /* TilesViewModel.swift in Sources */,

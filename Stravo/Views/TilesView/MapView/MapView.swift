@@ -27,11 +27,6 @@ struct MapView: UIViewRepresentable {
             view.userTrackingMode = vm.userTrackingMode
         }
 
-        guard context.coordinator.shouldUpdateView else {
-            context.coordinator.shouldUpdateView = true
-            return
-        }
-
         addOverlays(view)
     }
     
@@ -60,7 +55,6 @@ struct MapView: UIViewRepresentable {
     class Coordinator: NSObject, MKMapViewDelegate {
         let vm: ViewModel
         var pendingRegionChange = false
-        var shouldUpdateView = true
         var colorScheme: ColorScheme = .light
         
         init(_ vm: ViewModel) {
@@ -87,8 +81,8 @@ struct MapView: UIViewRepresentable {
             }
             fatalError("Unknown overlay \(overlay)")
         }
-        
-        func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+                    
+        func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
             if mapView.userTrackingMode != .none && !pendingRegionChange {
                 mapView.userTrackingMode = .none
                 Task {
@@ -96,13 +90,6 @@ struct MapView: UIViewRepresentable {
                 }
             }
             pendingRegionChange = false
-        }
-            
-        func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-            shouldUpdateView = false
-            Task { await MainActor.run {
-                vm.region = mapView.region
-            }}
         }
         
         func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {

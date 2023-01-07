@@ -17,6 +17,8 @@ extension TilesView {
         @Published var showLocationButton = true
         @Published var showTilesButton = true
         @Published var recordButtonText = "Record"
+        @Published var loadingTiles = false
+
 
         let mapVM = MapView.ViewModel()
 
@@ -59,6 +61,13 @@ extension TilesView {
             
             mapVM.$showTiles
                 .assign(to: &$showTilesButton)
+            
+            Task {
+                loadingTiles = true
+                await loadTiles()
+                loadingTiles = false
+                mapVM.showTiles = true
+            }
         }
         
                         

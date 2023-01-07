@@ -19,6 +19,22 @@ struct TilesNavigationView: View {
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         ToolbarItem(placement: .navigationBarTrailing) {
+                            Button {
+                                vm.synchronizeTiles()
+                            } label: {
+                                Label("Sync", systemImage: "arrow.clockwise")
+                                    .rotationEffect(.degrees(vm.isRotating))
+                                    .animation(
+                                        vm.isRotating == 0 ? Animation.default :
+                                        Animation.linear(duration: 1)
+                                        .speed(0.5)
+                                        .repeatForever(autoreverses: false),
+                                        value: vm.isRotating
+                                    )
+                            }
+                        }
+
+                        ToolbarItem(placement: .navigationBarTrailing) {
                             NavigationLink(destination: SettingsView(vm: .init(userStore: vm.userStore))) {
                                 Label("Settings", systemImage: "gear")
                             }
@@ -34,10 +50,25 @@ struct TilesNavigationView: View {
     }
     
     class ViewModel: ObservableObject {
+        @Published var isRotating = 0.0
         let userStore: UserStore
         
         init(userStore: UserStore) {
             self.userStore = userStore
+        }
+        
+        func synchronizeTiles() {
+            isRotating = isRotating > 0 ? 0 : 360
+        }
+    }
+}
+
+extension Animation {
+    func `repeat`(while expression: Bool, autoreverses: Bool = true) -> Animation {
+        if expression {
+            return self.repeatForever(autoreverses: autoreverses)
+        } else {
+            return self
         }
     }
 }

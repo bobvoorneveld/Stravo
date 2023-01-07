@@ -13,12 +13,13 @@ import KeychainAccess
 struct TilesView: View {
     @StateObject var vm: ViewModel
 
+    init(vm: ViewModel) {
+        self._vm = StateObject(wrappedValue: vm)
+    }
+    
     var body: some View {
         ZStack {
             MapView(vm: vm.mapVM)
-                .task {
-                    await vm.loadTiles()
-                }
 
             HStack {
                 Spacer()
@@ -40,15 +41,8 @@ struct TilesView: View {
                         .padding(.bottom)
                     }
 
-                    Button {
+                    TilesButton(loading: $vm.loadingTiles) {
                         vm.toggleTiles()
-                    } label: {
-                        Text("Tiles")
-                            .foregroundColor(.white)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 6)
-                            .background(.indigo.opacity(0.7))
-                            .cornerRadius(5)
                     }
                     .padding(.bottom)
                 }

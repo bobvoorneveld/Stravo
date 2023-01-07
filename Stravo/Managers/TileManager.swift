@@ -27,7 +27,10 @@ class TileManager {
     
     private func fetchTiles(coordinates: [CLLocationCoordinate2D]? = nil) async throws -> [MKOverlay]? {
         var request = URLRequest(url: URL(string: "http://602e-2a02-a446-ae5d-1-dc3-3f17-3633-159f.ngrok.io/activities/tiles")!)
-        request.setValue("Bearer \(userStore.token!)", forHTTPHeaderField: "Authorization")
+        guard let token = userStore.token else {
+            return nil
+        }
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         if let coordinates {
             request.httpMethod = "POST"
